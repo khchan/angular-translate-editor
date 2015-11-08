@@ -1,7 +1,7 @@
 (function() {
 	'use strict';
 	angular
-	  .module('angular-translate-editor', ['angular-translate-templates'])
+	  .module('khchan.translate-editor', ['angular-translate-templates'])
 	  .directive('translateEditor', translateEditor)
 	  .controller('TranslateEditorController', TranslateEditorController);
 

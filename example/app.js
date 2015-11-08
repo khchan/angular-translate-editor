@@ -1,7 +1,7 @@
 (function () {
 	'use strict';
 	angular
-		.module('app', ['angular-translate-editor'])
+		.module('app', ['khchan.translate-editor'])
 		.controller('AppCtrl', AppCtrl);
 
 	AppCtrl.$inject = ['$scope'];
