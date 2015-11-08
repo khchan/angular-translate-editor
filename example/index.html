@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+	<head>
+		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.0/lodash.js"></script>
+		<script src="https://rawgit.com/hbi99/defiant.js/master/dist/defiant-latest.min.js"></script>
+
+		<script src="app.js"></script>
+		<script src="angular-translate-editor.min.js"></script>
+	</head>
+
+	<body ng-controller="AppCtrl" class="container">
+		<br />
+		<div class="row">
+			<div class="col-md-12">
+				<translate-editor translations="translations" languages="languages" queries="queries"></translate-editor>
+			</div>
+		</div>
+		<hr />
+		<div class="row">
+			<div class="col-md-6">
+				<pre>{{translations.en | json}}</pre>
+			</div>
+			<div class="col-md-6">
+				<pre>{{translations.fr | json}}</pre>
+			</div>
+		</div>
+	</body>
+
+</html>

@@ -1,0 +1,43 @@
+{
+  "name": "angular-translate-editor",
+  "version": "1.0.0",
+  "description": "AngularJS directive for editing multiple angular-translate localization files",
+  "main": "index.js",
+  "directories": {
+    "example": "example"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/khchan/angular-translate-editor.git"
+  },
+  "keywords": [
+    "angular",
+    "angular-translate"
+  ],
+  "author": "Kevin Chan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/khchan/angular-translate-editor/issues"
+  },
+  "homepage": "https://github.com/khchan/angular-translate-editor#readme",
+  "devDependencies": {
+    "add-stream": "^1.0.0",
+    "del": "^2.0.2",
+    "gulp": "^3.9.0",
+    "gulp-angular-templatecache": "^1.8.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-sass": "^2.1.0",
+    "gulp-serve": "^1.2.0",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-uglify": "^1.4.2",
+    "gulp-util": "^3.0.7"
+  },
+  "dependencies": {
+    "gulp-htmlmin": "^1.2.0",
+    "gulp-jshint": "^1.12.0",
+    "jshint-stylish": "^2.0.1"
+  }
+}

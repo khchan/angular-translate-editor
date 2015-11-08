@@ -1,0 +1,28 @@
+{
+  "name": "angular-translate-editor",
+  "authors": [
+    "(Kevin Chan <kvii.chan@gmail.com>)"
+  ],
+  "description": "AngularJS directive for editing multiple angular-translate localization files",
+  "main": "angular-translate-editor.js",
+  "moduleType": [],
+  "keywords": [
+    "angularjs",
+    "angular-translate"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.4.7",
+    "lodash": "~3.10.1",
+    "bootstrap-css": "~3.3.4",
+    "defiant.js": "defiantjs#~1.3.4"
+  }
+}
