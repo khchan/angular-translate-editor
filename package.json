@@ -17,7 +17,7 @@
     "angular",
     "angular-translate"
   ],
-  "author": "Kevin Chan",
+  "author": "(Kevin Chan <kvii.chan@gmail.com>)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/khchan/angular-translate-editor/issues"
