@@ -1,12 +1,12 @@
 (function() {
 	'use strict';
 	angular
-	  .module('khchan.translate-editor', ['angular-translate-templates'])
+	  .module('khchan.translate-editor', ['ui.bootstrap', 'angular-translate-templates'])
 	  .directive('translateEditor', translateEditor)
 	  .controller('TranslateEditorController', TranslateEditorController);
 
 	translateEditor.$inject = [];
-	TranslateEditorController.$inject = [];
+	TranslateEditorController.$inject = ['$scope'];
 
 	function translateEditor() {
 	  return {
@@ -25,7 +25,7 @@
 	  };
 	}
 
-	function TranslateEditorController() {
+	function TranslateEditorController($scope) {
 	  var vm = this;
 
 	  // from directive
@@ -116,6 +116,16 @@
 	  /**
 	   * Public Methods
 	   */
+
+	  $scope.$watch(function() {
+	  	return vm.languages;
+	  }, function (curr, orig) {
+	  	console.log(curr);
+	  	console.log(orig);
+	  	if (curr != orig) {
+	  		init(); // re-initialize bindings when languages are added/removed
+	  	}
+	  }, true);
 
 	  /**
 	   * updateObject
