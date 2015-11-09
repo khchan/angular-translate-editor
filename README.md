@@ -1,6 +1,7 @@
 # angular-translate-editor
 
 AngularJS directive for editing multiple angular-translate localization files at once using xPath for querying.
+See [plnkr](http://embed.plnkr.co/ku0p7vRdXx4fu1u6xclQ/preview) for an example of view the `examples` folder.
 
 ## Usage
 1. `bower install angular-translate-editor`
