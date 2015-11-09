@@ -37,6 +37,7 @@
 	  vm.onRemove = vm.onRemove || angular.noop();
 
 	  // bindable variables
+	  vm.tabs = {};
 	  vm.bindings = {};        // stores results of xPath query
 	  vm.xmlDefinitions = {};  // xml equivalents of translation jsons
 	  vm.hasError = false;     // boolean determining whether there was a query error
@@ -60,6 +61,9 @@
 
 	  function init() {
 	    _.each(vm.languages, function (lang) {
+	    	vm.tabs[lang] = {
+	    		$isOpen: true
+	    	};
 	      vm.bindings[lang] = {
 	        forms: []
 	      };
