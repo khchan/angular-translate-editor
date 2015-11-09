@@ -26,23 +26,6 @@
 					</div>
 					<div ng-if="!form.hasInput">
 						<div class="panel panel-default">
-							<div class="panel-heading">
-								<ng-form class="form-inline">
-									<div class="form-group">
-										<label>{{form.label}}.</label>
-										<input type="text" class="form-control input-sm" ng-model="locale.newKey" placeholder="TRANSLATION_KEY" />
-									</div>
-									<div class="form-group">
-										<label>&nbsp;  Value</label>
-										<input type="text" class="form-control input-sm" ng-model="form.newValue" placeholder="Translated Value" />
-									</div>
-									<button type="submit" class="btn btn-primary btn-sm"
-													ng-disabled="!form.newValue || !locale.newKey"
-													ng-click="locale.writeObjectByKey(locale.translations[language], form)">
-										Add
-									</button>
-								</ng-form>
-							</div>
 							<div class="panel-body">
 								<div ng-if="form.isFlat">
 									<div class="form-group" ng-repeat="(key, value) in form.value track by $index">
@@ -54,13 +37,36 @@
 											<span class="input-group-btn">
 												<button type="button" tabindex="-1" class="btn btn-warning btn-sm"
 																ng-click="locale.deleteObjectByKey(form, key)">
-													Remove
+													Delete
 												</button>
 											</span>
 										</div>
 									</div>
 								</div>
 								<pre ng-if="!form.isFlat">{{form.value | json}}</pre>
+							</div>
+
+							<div class="panel-footer">
+								<div class="row">
+									<div class="col-md-4">
+										<label>{{form.label}}.{{locale.newKey}}</label>
+										<input type="text" class="form-control input-sm" ng-model="locale.newKey" placeholder="TRANSLATION_KEY" />
+									</div>
+
+									<div class="col-md-8">
+										<label>Translated Value</label>
+										<div class="input-group">
+											<input type="text" class="form-control input-sm" ng-model="form.newValue" placeholder="Translated Value" />
+											<span class="input-group-btn">
+												<button type="button" class="btn btn-primary btn-sm"
+																ng-disabled="!form.newValue || !locale.newKey"
+																ng-click="locale.writeObjectByKey(locale.translations[language], form)">
+													Insert
+												</button>
+											</span>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
