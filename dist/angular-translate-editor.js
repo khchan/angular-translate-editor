@@ -120,8 +120,6 @@
 	  $scope.$watch(function() {
 	  	return vm.languages;
 	  }, function (curr, orig) {
-	  	console.log(curr);
-	  	console.log(orig);
 	  	if (curr != orig) {
 	  		init(); // re-initialize bindings when languages are added/removed
 	  	}
