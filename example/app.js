@@ -386,5 +386,13 @@
 			}
 		];
 
+		$scope.updateFn = function(language) {
+			console.log('Update ' + language);
+		};
+
+		$scope.removeFn = function(language) {
+			console.log('Remove ' + language);
+		};
+
 	}
 })();

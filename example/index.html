@@ -16,7 +16,12 @@
 		<br />
 		<div class="row">
 			<div class="col-md-12">
-				<translate-editor translations="translations" languages="languages" queries="queries"></translate-editor>
+				<translate-editor translations="translations"
+													languages="languages"
+													queries="queries"
+													on-update="updateFn"
+													on-remove="removeFn">
+				</translate-editor>
 			</div>
 		</div>
 	</body>

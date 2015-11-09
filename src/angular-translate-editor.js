@@ -12,10 +12,11 @@
 	  return {
 	    restrict: 'E',
 	    scope: {
-	      basePath: '=',       // xPath query to automatically prepend as root
 	      languages: '=',      // array of allowable locales
 	      translations: '=',   // dictionary of language-translations
-	      queries: '='         // predefined queries to build buttons on
+	      queries: '=',        // predefined queries to build buttons on
+	      onUpdate: '=',			 // callback on update one
+	      onRemove: '='				 // callback on remove one
 	    },
 	    replace: true,
 	    templateUrl: 'translate-editor.tpl.html',
@@ -32,6 +33,8 @@
 	  vm.languages = vm.languages || [];
 	  vm.translations = vm.translations || {};
 	  vm.queries = vm.queries || [];
+	  vm.onUpdate = vm.onUpdate || angular.noop();
+	  vm.onRemove = vm.onRemove || angular.noop();
 
 	  // bindable variables
 	  vm.bindings = {};        // stores results of xPath query
@@ -44,6 +47,8 @@
 	  vm.deleteObjectByKey = deleteObjectByKey;
 	  vm.updateTranslations = updateTranslations;
 	  vm.findByKey = findByKey;
+	  vm.callbackUpdate = callbackUpdate;
+	  vm.callbackRemove = callbackRemove;
 
 	  init();
 
@@ -235,6 +240,30 @@
 	        clearBindings();
 	      }
 	    }
+	  }
+
+	  /**
+	   * callbackUpdate
+	   * @description Invokes callback function to update specific language translations
+	   */
+	  function callbackUpdate(language, event) {
+	  	if (event) {
+				event.preventDefault();
+				event.stopPropagation();
+			}
+	  	return vm.onUpdate(language);
+	  }
+
+	  /**
+	   * callbackRemove
+	   * @description Invokes callback function to remove specific language translations
+	   */
+	  function callbackRemove(language, event) {
+	  	if (event) {
+				event.preventDefault();
+				event.stopPropagation();
+			}
+	  	return vm.onRemove(language);
 	  }
 	}
 })();

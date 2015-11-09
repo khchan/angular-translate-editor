@@ -15,10 +15,16 @@
 	<accordion ng-if="!locale.hasError" close-others="false">
     <accordion-group ng-repeat="language in locale.languages track by $index" is-open="locale.tabs[language].$isOpen">
       <accordion-heading>
-        Edit {{language | uppercase}} Dictionary <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': locale.tabs[language].$isOpen, 'glyphicon-chevron-right': !locale.tabs[language].$isOpen}"></i>
+        {{language | uppercase}} Dictionary
+        <i class="glyphicon" ng-class="{'glyphicon-chevron-down': locale.tabs[language].$isOpen, 'glyphicon-chevron-right': !locale.tabs[language].$isOpen}"></i>
+
+        <div class="pull-right">
+	        <button type="button" class="btn btn-info btn-xs" ng-click="locale.callbackUpdate(language, $event)">Update</button>
+	    		<button type="button" class="btn btn-danger btn-xs" ng-click="locale.callbackRemove(language, $event)">Remove</button>
+        </div>
       </accordion-heading>
 
-			<div class="form-group" ng-repeat="form in locale.bindings[language].forms track by $index">
+    	<div class="form-group" ng-repeat="form in locale.bindings[language].forms track by $index">
 				<div ng-if="form.hasInput">
 					<label>{{form.label}}: </label>
 					<input type="text" class="form-control input-sm" ng-model="form.value"
