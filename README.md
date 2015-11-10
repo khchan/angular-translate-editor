@@ -9,7 +9,12 @@ See [plnkr](http://embed.plnkr.co/ku0p7vRdXx4fu1u6xclQ/preview) for an example o
 3. Insert the `translate-editor` directive into your template:
 
 ```html
-<translate-editor translations="translations" languages="languages" queries="queries"></translate-editor>
+<translate-editor translations="translations" 
+		  languages="languages" 
+		  queries="queries"
+		  on-update="updateFn"
+		  on-remove="removeFn">
+</translate-editor>
 ```
 
 ```javascript
@@ -45,6 +50,14 @@ angular
 				search: '//IDENTITY'
 			}
 		];
+		
+		$scope.updateFn = function(language) {
+			console.log('Update ' + language);
+		};
+
+		$scope.removeFn = function(language) {
+			console.log('Remove ' + language);
+		};
 ```
 
 ## License
