@@ -38,11 +38,14 @@
 
 	  // bindable variables
 	  vm.tabs = {};
+	  vm.insertNewObject = {};
 	  vm.bindings = {};        // stores results of xPath query
 	  vm.xmlDefinitions = {};  // xml equivalents of translation jsons
 	  vm.hasError = false;     // boolean determining whether there was a query error
 
 	  // bindable methods
+	  vm.isEmpty = _.isEmpty;
+	  vm.isString = _.isString;
 	  vm.updateObject = updateObject;
 	  vm.writeObjectByKey = writeObjectByKey;
 	  vm.deleteObjectByKey = deleteObjectByKey;
@@ -61,6 +64,7 @@
 
 	  function init() {
 	    _.each(vm.languages, function (lang) {
+	    	vm.insertNewObject[lang] = false;
 	    	vm.tabs[lang] = {
 	    		$isOpen: true
 	    	};
@@ -81,6 +85,12 @@
 	    _.each(vm.languages, function (lang) {
 	      vm.bindings[lang].forms = [];
 	    });
+	  }
+
+	  function isFlat(object) {
+	  	return _.all(object, function (value, key) {
+        return _.isString(value);
+      });
 	  }
 
 	  function traverseObject(object, path) {
@@ -154,7 +164,7 @@
 	    // update for form in current language
 	    var curr = traverseObject(object, form.path);
 	    // set new key value
-	    curr[vm.newKey] = form.newValue;
+	    curr[vm.newKey] = (vm.insertNewObject[form.lang]) ? {} : form.newValue;
 	    // update json in preview
 	    form.value = curr;
 	    curr = null;
@@ -163,7 +173,7 @@
 	    _.each(_.without(vm.languages, form.lang), function (language) {
 	      curr = traverseObject(vm.translations[language], form.path);
 	      if (!_.has(curr, vm.newKey)) {
-	        curr[vm.newKey] = form.newValue;
+	        curr[vm.newKey] = (vm.insertNewObject[form.lang]) ? {} : form.newValue;
 	        _.map(vm.bindings[language].forms, function (form) {
 	          // update json in preview
 	          form.value = curr;
@@ -183,16 +193,32 @@
 	   * deleteObjectByKey
 	   * @description Deletes a value given a key in a flat json object
 	   */
-	  function deleteObjectByKey(form, key) {
+	  function deleteObjectByKey(inputForm, key) {
 	    _.each(vm.languages, function (language) {
-	      var curr = traverseObject(vm.translations[language], form.path);
-	      // set new key value
-	      delete curr[key];
-	      _.map(vm.bindings[language].forms, function (form) {
-	        // update json in preview
-	        form.value = curr;
+	    	var curr;
+	    	if (!key) {
+					curr = traverseObject(vm.translations[language], inputForm.path.slice(0, -1));
+		      // set new key value
+		      delete curr[_.last(inputForm.path)];
+	    	} else {
+		    	curr = traverseObject(vm.translations[language], inputForm.path);
+		      // set new key value
+		      delete curr[key];
+	    	}
+
+	    	_.map(vm.bindings[language].forms, function (form) {
+	      	if (form.label == inputForm.label) {
+		      	// update json in preview
+		        form.value = curr;	
+	      	}	        
 	      });
 	    });
+
+	    if (!key) { // if no key given, removing empty object and reset
+	    	delete vm.search;
+	    	init();
+	    }
+
 	    // sync changed json back to xml model
 	    syncJsonToXML();
 	  }
@@ -228,7 +254,7 @@
 	              path: path,
 	              hasInput: (typeof node !== 'object'),
 	              isFlat: _.all(nodeVal, function (value, key) {
-	                return _.isString(value);
+	                return isFlat(value);
 	              }),
 	              value: nodeVal,
 	              element: node
