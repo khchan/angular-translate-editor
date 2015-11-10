@@ -153,6 +153,9 @@
 	    curr[key] = value;
 	    form.value = curr;
 	    curr = null;
+
+	    // sync changed json back to xml model
+	    syncJsonToXML();
 	  }
 
 	  /**
@@ -209,8 +212,8 @@
 	    	_.map(vm.bindings[language].forms, function (form) {
 	      	if (form.label == inputForm.label) {
 		      	// update json in preview
-		        form.value = curr;	
-	      	}	        
+		        form.value = curr;
+	      	}
 	      });
 	    });
 
