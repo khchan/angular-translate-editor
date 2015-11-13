@@ -5,7 +5,7 @@
 				 ng-model-options="{ debounce: 500 }" placeholder="Enter xPath Query Here" />
 		<small ng-if="locale.hasError" class="pull-right text-danger">Invalid Query!</small>
 	</div>
-	<button class="btn btn-default btn-sm" ng-repeat="query in locale.queries track by $index"
+	<button class="btn btn-default btn-sm" ng-repeat="query in locale.queries"
 					ng-click="locale.findByKey(query.search); locale.search = query.search;">
 		{{query.label}}
 	</button>
@@ -13,7 +13,7 @@
 	<hr/>
 
 	<accordion ng-if="!locale.hasError" close-others="false">
-    <accordion-group ng-repeat="language in locale.languages track by $index" is-open="locale.tabs[language].$isOpen">
+    <accordion-group ng-repeat="language in locale.languages track by language" is-open="locale.tabs[language].$isOpen">
       <accordion-heading>
         {{language | uppercase}} Dictionary
         <i class="glyphicon" ng-class="{'glyphicon-chevron-down': locale.tabs[language].$isOpen, 'glyphicon-chevron-right': !locale.tabs[language].$isOpen}"></i>
@@ -24,7 +24,7 @@
         </div>
       </accordion-heading>
 
-    	<div class="form-group" ng-repeat="form in locale.bindings[language].forms track by $index">
+    	<div class="form-group" ng-repeat="form in locale.bindings[language].forms">
 				<div ng-if="form.hasInput">
 					<label>{{form.label}}: </label>
 					<input type="text" class="form-control input-sm" ng-model="form.value"
@@ -41,7 +41,7 @@
 					<div class="panel panel-default">
 						<div class="panel-body">
 							<div ng-if="form.isFlat">
-								<div class="form-group" ng-repeat="(key, value) in form.value track by $index">
+								<div class="form-group" ng-repeat="(key, value) in form.value">
 									<label>{{form.label}}.{{key}}</label>
 									<div ng-if="locale.isString(value)" class="input-group">
 										<input type="text" class="form-control input-sm" ng-model="value"
