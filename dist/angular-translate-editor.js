@@ -12,6 +12,7 @@
 	  return {
 	    restrict: 'E',
 	    scope: {
+	    	basePath: '@',			 // initial base path to pre-load search
 	      languages: '=',      // array of allowable locales
 	      translations: '=',   // dictionary of language-translations
 	      queries: '=',        // predefined queries to build buttons on
@@ -30,6 +31,7 @@
 	  var vm = this;
 
 	  // from directive
+	  vm.basePath = vm.basePath || "";
 	  vm.languages = vm.languages || [];
 	  vm.translations = vm.translations || {};
 	  vm.queries = vm.queries || [];
@@ -76,6 +78,10 @@
 	      };
 	      vm.xmlDefinitions[lang] = JSON.toXML(vm.translations[lang]);
 	    });
+	    if (!_.isEmpty(vm.basePath)) {
+	      vm.search = vm.basePath;
+	      findByKey(vm.basePath);
+	    }
 	  }
 
 	  function syncJsonToXML() {
