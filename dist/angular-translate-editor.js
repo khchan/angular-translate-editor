@@ -46,6 +46,9 @@
 	  // bindable methods
 	  vm.isEmpty = _.isEmpty;
 	  vm.isString = _.isString;
+	  vm.collapseAll = collapseAll;
+	  vm.isFavourited = isFavourited;
+	  vm.addFavourite = addFavourite;
 	  vm.updateObject = updateObject;
 	  vm.writeObjectByKey = writeObjectByKey;
 	  vm.deleteObjectByKey = deleteObjectByKey;
@@ -66,7 +69,7 @@
 	    _.each(vm.languages, function (lang) {
 	    	vm.insertNewObject[lang] = false;
 	    	vm.tabs[lang] = {
-	    		$isOpen: true
+	    		$isOpen: false
 	    	};
 	      vm.bindings[lang] = {
 	        forms: []
@@ -143,6 +146,30 @@
 	  		init(); // re-initialize bindings when languages are added/removed
 	  	}
 	  }, true);
+
+	  function collapseAll() {
+	  	_.each(vm.languages, function (language) {
+				vm.tabs[language].$isOpen = vm.isAllCollapsed;
+	  	});
+	  }
+
+	  function isFavourited(query) {
+	  	return _.contains(_.pluck(vm.queries, 'search'), query);
+	  }
+
+	  function addFavourite(query) {
+	  	if (isFavourited(query)) {
+	  		vm.queries = _.reject(vm.queries, { search: query });
+	  	} else {
+	  		var label = prompt("Please enter a label: ", query);
+	  		if (!_.isEmpty(label)) {
+	  			vm.queries.push({
+	  				label: label,
+	  				search: query
+	  			});
+	  		}
+	  	}
+	  }
 
 	  /**
 	   * updateObject
@@ -300,4 +327,5 @@
 	  }
 	}
 })();
-angular.module("angular-translate-templates", []).run(["$templateCache", function($templateCache) {$templateCache.put("translate-editor.tpl.html","<div><div class=\"form-group\" ng-class=\"{ \'has-error\': locale.hasError }\"><input type=\"text\" class=\"form-control\" ng-model=\"locale.search\" ng-change=\"locale.findByKey(locale.search)\" ng-model-options=\"{ debounce: 500 }\" placeholder=\"Enter xPath Query Here\"> <small ng-if=\"locale.hasError\" class=\"pull-right text-danger\">Invalid Query!</small></div><button class=\"btn btn-default btn-sm\" ng-repeat=\"query in locale.queries\" ng-click=\"locale.findByKey(query.search); locale.search = query.search;\">{{query.label}}</button><hr><accordion ng-if=\"!locale.hasError\" close-others=\"false\"><accordion-group ng-repeat=\"language in locale.languages track by language\" is-open=\"locale.tabs[language].$isOpen\"><accordion-heading>{{language | uppercase}} Dictionary <i class=\"glyphicon\" ng-class=\"{\'glyphicon-chevron-down\': locale.tabs[language].$isOpen, \'glyphicon-chevron-right\': !locale.tabs[language].$isOpen}\"></i><div class=\"pull-right\"><button type=\"button\" tabindex=\"-1\" class=\"btn btn-info btn-xs\" ng-click=\"locale.callbackUpdate(language, $event)\">Update</button> <button type=\"button\" tabindex=\"-1\" class=\"btn btn-danger btn-xs\" ng-click=\"locale.callbackRemove(language, $event)\">Remove</button></div></accordion-heading><div class=\"form-group\" ng-repeat=\"form in locale.bindings[language].forms\"><div ng-if=\"form.hasInput\"><label>{{form.label}}:</label><input type=\"text\" class=\"form-control input-sm\" ng-model=\"form.value\" ng-change=\"locale.updateTranslations(form)\" ng-model-options=\"{ debounce: 500 }\"></div><div ng-if=\"!form.hasInput\"><div ng-if=\"locale.isEmpty(form.value)\"><button type=\"button\" tabindex=\"-1\" class=\"btn btn-warning btn-sm pull-right\" ng-click=\"locale.deleteObjectByKey(form)\">Remove Empty Object</button></div><div class=\"panel panel-default\"><div class=\"panel-body\"><div ng-if=\"form.isFlat\"><div class=\"form-group\" ng-repeat=\"(key, value) in form.value\"><label>{{form.label}}.{{key}}</label><div ng-if=\"locale.isString(value)\" class=\"input-group\"><input type=\"text\" class=\"form-control input-sm\" ng-model=\"value\" ng-change=\"locale.updateObject(locale.translations[language], form, key, value)\" ng-model-options=\"{ debounce: 500 }\"><pre ng-if=\"!locale.isString(value)\">{{value | json}}</pre><span class=\"input-group-btn\"><button type=\"button\" tabindex=\"-1\" class=\"btn btn-warning btn-sm\" ng-click=\"locale.deleteObjectByKey(form, key)\">Delete</button></span></div><div ng-if=\"!locale.isString(value)\"><pre>{{value | json}}</pre><button type=\"button\" tabindex=\"-1\" class=\"btn btn-warning btn-sm\" ng-click=\"locale.deleteObjectByKey(form, key)\">Delete</button></div></div></div><pre ng-if=\"!form.isFlat\">{{form.value | json}}</pre></div><div class=\"panel-footer\"><div class=\"row\"><div class=\"col-md-4\"><label>{{form.label}}.{{locale.newKey}}</label><input type=\"text\" class=\"form-control input-sm\" ng-model=\"locale.newKey\" placeholder=\"TRANSLATION_KEY\"></div><div class=\"col-md-8\"><label>Translated Value</label><div class=\"input-group\"><input type=\"text\" ng-if=\"!locale.insertNewObject[language]\" class=\"form-control input-sm\" ng-model=\"form.newValue\" placeholder=\"Translated Value\"> <span class=\"input-group-btn\"><button type=\"button\" class=\"btn btn-primary btn-sm\" ng-disabled=\"(locale.insertNewObject[language] && !locale.newKey) || (!locale.insertNewObject[language] && !form.newValue || !locale.newKey)\" ng-click=\"locale.writeObjectByKey(locale.translations[language], form)\">Insert</button></span></div></div></div><div class=\"row\"><div class=\"col-md-12\"><div class=\"checkbox\"><label><input type=\"checkbox\" ng-model=\"locale.insertNewObject[language]\"> Insert As New Object</label></div></div></div></div></div></div></div><div ng-if=\"locale.search\" class=\"checkbox\"><label><input type=\"checkbox\" ng-model=\"locale.showAll[language]\"> Show Full Translation</label></div><pre ng-if=\"!locale.search || locale.showAll[language]\">{{locale.translations[language] | json}}</pre></accordion-group></accordion></div>");}]);
+
+angular.module("angular-translate-templates", []).run(["$templateCache", function($templateCache) {$templateCache.put("translate-editor.tpl.html","<div><div class=\"form-group\" ng-class=\"{ \'has-error\': locale.hasError }\"><div class=\"input-group\"><input type=\"text\" class=\"form-control\" ng-model=\"locale.search\" ng-change=\"locale.findByKey(locale.search)\" ng-model-options=\"{ debounce: 500 }\" placeholder=\"Enter xPath Query Here\"><div class=\"input-group-btn\"><button type=\"button\" class=\"btn btn-default\" ng-click=\"locale.addFavourite(locale.search)\"><span class=\"glyphicon\" ng-class=\"{\n						\'glyphicon-star\': !locale.isFavourited(locale.search),\n						\'glyphicon-star-empty\': locale.isFavourited(locale.search)\n					}\"></span></button></div></div><small ng-if=\"locale.hasError\" class=\"pull-right text-danger\">Invalid Query!</small></div><button type=\"button\" class=\"btn btn-default btn-sm\" ng-repeat=\"query in locale.queries\" ng-click=\"locale.findByKey(query.search); locale.search = query.search;\">{{query.label}}</button><div class=\"checkbox pull-right\"><label><input type=\"checkbox\" ng-model=\"locale.isAllCollapsed\" ng-change=\"locale.collapseAll()\"> Collapse All</label></div><hr><accordion ng-if=\"!locale.hasError\" close-others=\"false\"><accordion-group ng-repeat=\"language in locale.languages track by language\" is-open=\"locale.tabs[language].$isOpen\"><accordion-heading>{{language | uppercase}} Dictionary <i class=\"glyphicon\" ng-class=\"{\'glyphicon-chevron-down\': locale.tabs[language].$isOpen, \'glyphicon-chevron-right\': !locale.tabs[language].$isOpen}\"></i><div class=\"pull-right\"><button type=\"button\" tabindex=\"-1\" class=\"btn btn-info btn-xs\" ng-click=\"locale.callbackUpdate(language, $event)\">Update</button> <button type=\"button\" tabindex=\"-1\" class=\"btn btn-danger btn-xs\" ng-click=\"locale.callbackRemove(language, $event)\">Remove</button></div></accordion-heading><div class=\"form-group\" ng-repeat=\"form in locale.bindings[language].forms\"><div ng-if=\"form.hasInput\"><label>{{form.label}}:</label><input type=\"text\" class=\"form-control input-sm\" ng-model=\"form.value\" ng-change=\"locale.updateTranslations(form)\" ng-model-options=\"{ debounce: 500 }\"></div><div ng-if=\"!form.hasInput\"><div ng-if=\"locale.isEmpty(form.value)\"><button type=\"button\" tabindex=\"-1\" class=\"btn btn-warning btn-sm pull-right\" ng-click=\"locale.deleteObjectByKey(form)\">Remove Empty Object</button></div><div class=\"panel panel-default\"><div class=\"panel-body\"><div ng-if=\"form.isFlat\"><div class=\"form-group\" ng-repeat=\"(key, value) in form.value\"><label>{{form.label}}.{{key}}</label><div ng-if=\"locale.isString(value)\" class=\"input-group\"><input type=\"text\" class=\"form-control input-sm\" ng-model=\"value\" ng-change=\"locale.updateObject(locale.translations[language], form, key, value)\" ng-model-options=\"{ debounce: 500 }\"><pre ng-if=\"!locale.isString(value)\">{{value | json}}</pre><span class=\"input-group-btn\"><button type=\"button\" tabindex=\"-1\" class=\"btn btn-warning btn-sm\" ng-click=\"locale.deleteObjectByKey(form, key)\">Delete</button></span></div><div ng-if=\"!locale.isString(value)\"><pre>{{value | json}}</pre><button type=\"button\" tabindex=\"-1\" class=\"btn btn-warning btn-sm\" ng-click=\"locale.deleteObjectByKey(form, key)\">Delete</button></div></div></div><pre ng-if=\"!form.isFlat\">{{form.value | json}}</pre></div><div class=\"panel-footer\"><div class=\"row\"><div class=\"col-md-4\"><label>{{form.label}}.{{locale.newKey}}</label><input type=\"text\" class=\"form-control input-sm\" ng-model=\"locale.newKey\" placeholder=\"TRANSLATION_KEY\"></div><div class=\"col-md-8\"><label>Translated Value</label><div class=\"input-group\"><input type=\"text\" ng-if=\"!locale.insertNewObject[language]\" class=\"form-control input-sm\" ng-model=\"form.newValue\" placeholder=\"Translated Value\"> <span class=\"input-group-btn\"><button type=\"button\" class=\"btn btn-primary btn-sm\" ng-disabled=\"(locale.insertNewObject[language] && !locale.newKey) || (!locale.insertNewObject[language] && !form.newValue || !locale.newKey)\" ng-click=\"locale.writeObjectByKey(locale.translations[language], form)\">Insert</button></span></div></div></div><div class=\"row\"><div class=\"col-md-12\"><div class=\"checkbox\"><label><input type=\"checkbox\" ng-model=\"locale.insertNewObject[language]\"> Insert As New Object</label></div></div></div></div></div></div></div><div ng-if=\"locale.search\" class=\"checkbox\"><label><input type=\"checkbox\" ng-model=\"locale.showAll[language]\"> Show Full Translation</label></div><pre ng-if=\"!locale.search || locale.showAll[language]\">{{locale.translations[language] | json}}</pre></accordion-group></accordion></div>");}]);

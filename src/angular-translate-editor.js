@@ -46,6 +46,9 @@
 	  // bindable methods
 	  vm.isEmpty = _.isEmpty;
 	  vm.isString = _.isString;
+	  vm.collapseAll = collapseAll;
+	  vm.isFavourited = isFavourited;
+	  vm.addFavourite = addFavourite;
 	  vm.updateObject = updateObject;
 	  vm.writeObjectByKey = writeObjectByKey;
 	  vm.deleteObjectByKey = deleteObjectByKey;
@@ -66,7 +69,7 @@
 	    _.each(vm.languages, function (lang) {
 	    	vm.insertNewObject[lang] = false;
 	    	vm.tabs[lang] = {
-	    		$isOpen: true
+	    		$isOpen: false
 	    	};
 	      vm.bindings[lang] = {
 	        forms: []
@@ -143,6 +146,30 @@
 	  		init(); // re-initialize bindings when languages are added/removed
 	  	}
 	  }, true);
+
+	  function collapseAll() {
+	  	_.each(vm.languages, function (language) {
+				vm.tabs[language].$isOpen = vm.isAllCollapsed;
+	  	});
+	  }
+
+	  function isFavourited(query) {
+	  	return _.contains(_.pluck(vm.queries, 'search'), query);
+	  }
+
+	  function addFavourite(query) {
+	  	if (isFavourited(query)) {
+	  		vm.queries = _.reject(vm.queries, { search: query });
+	  	} else {
+	  		var label = prompt("Please enter a label: ", query);
+	  		if (!_.isEmpty(label)) {
+	  			vm.queries.push({
+	  				label: label,
+	  				search: query
+	  			});
+	  		}
+	  	}
+	  }
 
 	  /**
 	   * updateObject

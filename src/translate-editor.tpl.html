@@ -1,14 +1,32 @@
 <div>
 	<div class="form-group" ng-class="{ 'has-error': locale.hasError }">
-		<input type="text" class="form-control" ng-model="locale.search"
-				 ng-change="locale.findByKey(locale.search)"
-				 ng-model-options="{ debounce: 500 }" placeholder="Enter xPath Query Here" />
+		<div class="input-group">
+			<input type="text" class="form-control" ng-model="locale.search"
+					 ng-change="locale.findByKey(locale.search)"
+					 ng-model-options="{ debounce: 500 }" placeholder="Enter xPath Query Here" />
+			<div class="input-group-btn">
+				<button type="button" class="btn btn-default" ng-click="locale.addFavourite(locale.search)">
+					<span class="glyphicon" ng-class="{
+						'glyphicon-star': !locale.isFavourited(locale.search),
+						'glyphicon-star-empty': locale.isFavourited(locale.search)
+					}"></span>
+				</button>
+			</div>
+		</div>
 		<small ng-if="locale.hasError" class="pull-right text-danger">Invalid Query!</small>
 	</div>
-	<button class="btn btn-default btn-sm" ng-repeat="query in locale.queries"
+
+	<button type="button" class="btn btn-default btn-sm"
+					ng-repeat="query in locale.queries"
 					ng-click="locale.findByKey(query.search); locale.search = query.search;">
 		{{query.label}}
 	</button>
+
+	<div class="checkbox pull-right">
+		<label>
+			<input type="checkbox" ng-model="locale.isAllCollapsed" ng-change="locale.collapseAll()" /> Collapse All
+		</label>
+	</div>
 
 	<hr/>
 
@@ -47,7 +65,7 @@
 										<input type="text" class="form-control input-sm" ng-model="value"
 													 ng-change="locale.updateObject(locale.translations[language], form, key, value)"
 													 ng-model-options="{ debounce: 500 }" />
-										<pre ng-if="!locale.isString(value)">{{value | json}}</pre>	 		
+										<pre ng-if="!locale.isString(value)">{{value | json}}</pre>
 										<span class="input-group-btn">
 											<button type="button" tabindex="-1" class="btn btn-warning btn-sm"
 															ng-click="locale.deleteObjectByKey(form, key)">
@@ -61,7 +79,7 @@
 														ng-click="locale.deleteObjectByKey(form, key)">
 											Delete
 										</button>
-									</div>									
+									</div>
 								</div>
 							</div>
 							<pre ng-if="!form.isFlat">{{form.value | json}}</pre>
@@ -97,13 +115,13 @@
 											<input type="checkbox" ng-model="locale.insertNewObject[language]"/> Insert As New Object
 										</label>
 									</div>
-								</div>								
-							</div>							
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			
+
 			<div ng-if="locale.search" class="checkbox">
 				<label>
 					<input type="checkbox" ng-model="locale.showAll[language]"/> Show Full Translation
