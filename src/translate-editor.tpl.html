@@ -37,8 +37,8 @@
         <i class="glyphicon" ng-class="{'glyphicon-chevron-down': locale.tabs[language].$isOpen, 'glyphicon-chevron-right': !locale.tabs[language].$isOpen}"></i>
 
         <div class="pull-right">
-	        <button type="button" tabindex="-1" class="btn btn-info btn-xs" ng-click="locale.callbackUpdate(language, $event)">Update</button>
-	    		<button type="button" tabindex="-1" class="btn btn-danger btn-xs" ng-click="locale.callbackRemove(language, $event)">Remove</button>
+	        <button type="button" tabindex="-1" class="btn btn-info btn-xs" ng-if="locale.hasUpdateFn" ng-click="locale.callbackUpdate(language, $event)">Update</button>
+	    		<button type="button" tabindex="-1" class="btn btn-danger btn-xs" ng-if="locale.hasRemoveFn" ng-click="locale.callbackRemove(language, $event)">Remove</button>
         </div>
       </accordion-heading>
 

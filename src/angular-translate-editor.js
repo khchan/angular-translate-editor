@@ -35,6 +35,8 @@
 	  vm.languages = vm.languages || [];
 	  vm.translations = vm.translations || {};
 	  vm.queries = vm.queries || [];
+	  vm.hasUpdateFn = _.isFunction(vm.onUpdate);
+	  vm.hasRemoveFn = _.isFunction(vm.onRemove);
 	  vm.onUpdate = vm.onUpdate || angular.noop();
 	  vm.onRemove = vm.onRemove || angular.noop();
 
