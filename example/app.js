@@ -386,16 +386,14 @@
 			}
 		];
 
+		$scope.isValid = false;
+
 		$scope.updateFn = function(language) {
 			console.log('Update ' + language);
 		};
 
 		$scope.removeFn = function(language) {
 			console.log('Remove ' + language);
-		};
-
-		$scope.saveFn = function() {
-			console.log('Saved all languages');
 		};
 
 	}
