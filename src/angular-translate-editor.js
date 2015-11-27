@@ -17,7 +17,8 @@
 	      translations: '=',   // dictionary of language-translations
 	      queries: '=',        // predefined queries to build buttons on
 	      onUpdate: '=',			 // callback on update one
-	      onRemove: '='				 // callback on remove one
+	      onRemove: '=',			 // callback on remove one
+	      onSave: '='				 	 // callback on save all
 	    },
 	    replace: true,
 	    templateUrl: 'translate-editor.tpl.html',
@@ -39,6 +40,7 @@
 	  vm.hasRemoveFn = _.isFunction(vm.onRemove);
 	  vm.onUpdate = vm.onUpdate || angular.noop();
 	  vm.onRemove = vm.onRemove || angular.noop();
+	  vm.onSave = vm.onSave || angular.noop();
 
 	  // bindable variables
 	  vm.tabs = {};
@@ -58,8 +60,10 @@
 	  vm.deleteObjectByKey = deleteObjectByKey;
 	  vm.updateTranslations = updateTranslations;
 	  vm.findByKey = findByKey;
+	  vm.areTranslationsValid = areTranslationsValid;
 	  vm.callbackUpdate = callbackUpdate;
 	  vm.callbackRemove = callbackRemove;
+	  vm.callbackSave = callbackSave;
 
 	  init();
 
@@ -311,6 +315,19 @@
 	  }
 
 	  /**
+	   * areTranslationsValid
+	   * @description Returns true if forms have all their translated values filled out
+	   * @return {Boolean}
+	   */
+	  function areTranslationsValid() {
+	  	return _.all(vm.languages, function (language) {
+	  		return _.all(vm.bindings[language].forms, function (form) {
+	  			return !_.isEmpty(form.value);
+	  		});
+	  	});
+	  }
+
+	  /**
 	   * callbackUpdate
 	   * @description Invokes callback function to update specific language translations
 	   */
@@ -332,6 +349,18 @@
 				event.stopPropagation();
 			}
 	  	return vm.onRemove(language);
+	  }
+
+	  /**
+	   * callbackSave
+	   * @description Invokes callback function to save all language translations
+	   */
+	  function callbackSave(event) {
+	  	if (event) {
+				event.preventDefault();
+				event.stopPropagation();
+			}
+	  	return vm.onSave();
 	  }
 	}
 })();

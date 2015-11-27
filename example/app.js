@@ -394,5 +394,9 @@
 			console.log('Remove ' + language);
 		};
 
+		$scope.saveFn = function() {
+			console.log('Saved all languages');
+		};
+
 	}
 })();
