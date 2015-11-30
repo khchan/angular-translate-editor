@@ -73,13 +73,10 @@
 										<label>{{form.label}}.{{key}}</label>
 										<!-- String Fields -->
 										<div ng-if="locale.isString(value)" class="input-group"
-										     ng-class="{ 'has-error': !form.value }">
+										     ng-class="{ 'has-error': !value }">
 											<input type="text" class="form-control input-sm" ng-model="value"
 											       ng-change="locale.updateObject(locale.translations[language], form, key, value)"
-											       ng-model-options="{ debounce: 500 }" required/>
-											<small ng-if="!form.value" class="pull-right text-danger">Missing
-												Translation!
-											</small>
+											       ng-model-options="{ debounce: 500 }" />
 											<pre ng-if="!locale.isString(value)">{{value | json}}</pre>
 											<span class="input-group-btn">
 												<button type="button" tabindex="-1" class="btn btn-warning btn-sm"
