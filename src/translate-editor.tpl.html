@@ -33,10 +33,10 @@
 	</div>
 
 	<div class="row">
-		<accordion ng-if="!locale.hasError" close-others="false">
-			<accordion-group ng-repeat="language in locale.languages track by language"
+		<uib-accordion ng-if="!locale.hasError" close-others="false">
+			<uib-accordion-group ng-repeat="language in locale.languages track by language"
 			                 is-open="locale.tabs[language].$isOpen">
-				<accordion-heading>
+				<uib-accordion-heading>
 					{{language | uppercase}} Dictionary
 					<i class="glyphicon"
 					   ng-class="{'glyphicon-chevron-down': locale.tabs[language].$isOpen, 'glyphicon-chevron-right': !locale.tabs[language].$isOpen}"></i>
@@ -46,7 +46,7 @@
 						        ng-click="locale.callbackRemove(language, $event)">Remove
 						</button>
 					</div>
-				</accordion-heading>
+				</uib-accordion-heading>
 
 				<div class="form-group" ng-repeat="form in locale.bindings[language].forms">
 					<!-- Direct Access to Key -->
@@ -149,7 +149,7 @@
 					</label>
 				</div>
 				<pre ng-if="!locale.search || locale.showAll[language]">{{locale.translations[language] | json}}</pre>
-			</accordion-group>
-		</accordion>
+			</uib-accordion-group>
+		</uib-accordion>
 	</div>
 </div>
