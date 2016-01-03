@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>angular-translate-editor by khchan</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">angular-translate-editor</h1>
+      <h2 class="project-tagline">AngularJS directive for editing multiple angular-translate localization files</h2>
+      <a href="https://github.com/khchan/angular-translate-editor" class="btn">View on GitHub</a>
+      <a href="https://github.com/khchan/angular-translate-editor/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/khchan/angular-translate-editor/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="angular-translate-editor" class="anchor" href="#angular-translate-editor" aria-hidden="true"><span class="octicon octicon-link"></span></a>angular-translate-editor</h1>
+
+<p>AngularJS directive for editing multiple angular-translate localization files at once using xPath for querying.
+See <a href="http://embed.plnkr.co/ku0p7vRdXx4fu1u6xclQ/preview">plnkr</a> for an example of view the <code>examples</code> folder.</p>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<ol>
+<li><code>bower install angular-translate-editor</code></li>
+<li>Add <code>khchan.translate-editor</code> as a module dependency to your app.</li>
+<li>Insert the <code>translate-editor</code> directive into your template:</li>
+</ol>
+
+<div class="highlight highlight-text-html-basic"><pre>&lt;<span class="pl-ent">translate</span><span class="pl-e">-editor</span> <span class="pl-e">base-path</span>=<span class="pl-s"><span class="pl-pds">"</span>//AUTH<span class="pl-pds">"</span></span>
+                                    <span class="pl-e">translations</span>=<span class="pl-s"><span class="pl-pds">"</span>translations<span class="pl-pds">"</span></span>
+                                    <span class="pl-e">languages</span>=<span class="pl-s"><span class="pl-pds">"</span>languages<span class="pl-pds">"</span></span>
+                                    <span class="pl-e">queries</span>=<span class="pl-s"><span class="pl-pds">"</span>queries<span class="pl-pds">"</span></span>
+                                    <span class="pl-e">on-update</span>=<span class="pl-s"><span class="pl-pds">"</span>updateFn<span class="pl-pds">"</span></span>
+                                    <span class="pl-e">on-remove</span>=<span class="pl-s"><span class="pl-pds">"</span>removeFn<span class="pl-pds">"</span></span>
+                                    <span class="pl-e">on-save</span>=<span class="pl-s"><span class="pl-pds">"</span>saveFn<span class="pl-pds">"</span></span>&gt;
+&lt;/<span class="pl-ent">translate</span><span class="pl-e">-editor</span>&gt;</pre></div>
+
+<div class="highlight highlight-source-js"><pre>angular
+        .<span class="pl-en">module</span>(<span class="pl-s"><span class="pl-pds">'</span>app<span class="pl-pds">'</span></span>, [<span class="pl-s"><span class="pl-pds">'</span>khchan.translate-editor<span class="pl-pds">'</span></span>])
+        .<span class="pl-en">controller</span>(<span class="pl-s"><span class="pl-pds">'</span>AppCtrl<span class="pl-pds">'</span></span>, AppCtrl);
+
+    <span class="pl-smi">AppCtrl</span>.<span class="pl-smi">$inject</span> <span class="pl-k">=</span> [<span class="pl-s"><span class="pl-pds">'</span>$scope<span class="pl-pds">'</span></span>];
+
+    <span class="pl-k">function</span> <span class="pl-en">AppCtrl</span>(<span class="pl-smi">$scope</span>) {
+        <span class="pl-smi">$scope</span>.<span class="pl-smi">languages</span> <span class="pl-k">=</span> [<span class="pl-s"><span class="pl-pds">'</span>en<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>fr<span class="pl-pds">'</span></span>];
+
+        <span class="pl-smi">$scope</span>.<span class="pl-smi">translateions</span> <span class="pl-k">=</span> {
+            <span class="pl-s"><span class="pl-pds">'</span>en<span class="pl-pds">'</span></span><span class="pl-k">:</span> <span class="pl-c">// english translations</span>
+            <span class="pl-s"><span class="pl-pds">'</span>fr<span class="pl-pds">'</span></span><span class="pl-k">:</span> <span class="pl-c">// french translations</span>
+        };
+
+        <span class="pl-smi">$scope</span>.<span class="pl-smi">queries</span> <span class="pl-k">=</span> [
+            {
+                label<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Login Title<span class="pl-pds">'</span></span>,
+                search<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>//APP/AUTH/TITLE<span class="pl-pds">'</span></span>
+            },
+            {
+                label<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Open Buttons<span class="pl-pds">'</span></span>,
+                search<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>//OPEN_BTN<span class="pl-pds">'</span></span>
+            },
+            {
+                label<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Studies Menu<span class="pl-pds">'</span></span>,
+                search<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>//MENU/STUDIES<span class="pl-pds">'</span></span>
+            },
+            {
+                label<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Model Identities<span class="pl-pds">'</span></span>,
+                search<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>//IDENTITY<span class="pl-pds">'</span></span>
+            }
+        ];
+
+        <span class="pl-c1">$scope</span>.<span class="pl-en">updateFn</span> <span class="pl-k">=</span> <span class="pl-k">function</span>(<span class="pl-smi">language</span>) {
+            <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">'</span>Update <span class="pl-pds">'</span></span> <span class="pl-k">+</span> language);
+        };
+
+        <span class="pl-c1">$scope</span>.<span class="pl-en">removeFn</span> <span class="pl-k">=</span> <span class="pl-k">function</span>(<span class="pl-smi">language</span>) {
+            <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">'</span>Remove <span class="pl-pds">'</span></span> <span class="pl-k">+</span> language);
+        };
+
+        <span class="pl-c1">$scope</span>.<span class="pl-en">saveFn</span> <span class="pl-k">=</span> <span class="pl-k">function</span>() {
+            <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">'</span>Saved all languages<span class="pl-pds">'</span></span>);
+        };</pre></div>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p>MIT</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/khchan/angular-translate-editor">angular-translate-editor</a> is maintained by <a href="https://github.com/khchan">khchan</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
